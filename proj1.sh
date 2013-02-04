@@ -1,9 +1,19 @@
 #!/bin/bash
 
 DATABASEFILE="databaseFile.txt"
+IFS=":"
 
-#function findRecord {
-#}
+function findRecord {
+	echo "Enter what to search for: "
+	read NAME
+	while read p; do
+		if [[ *$NAME* == "$i" ]]; then
+			echo "Record Found"
+			echo $i
+			break;
+		fi
+	done < $DATABASEFILE
+}
 
 function addRecord {
 	echo "Enter the person's name: "
@@ -15,6 +25,7 @@ function addRecord {
 	echo "Enter the person's email: "
 	read EMAIL
 	echo "$NAME:$ADDRESS:$PHONE:$EMAIL" >> $DATABASEFILE
+	echo "Record added"
 }
 
 #function updateRecord {
@@ -37,7 +48,6 @@ function printMenu {
 if [ ! -e "$DATABASEFILE" ] ; then
 	echo "Creatineg database file" . $DATABASEFILE
 	touch $DATABASEFILE
-	echo "Name:Address:Phone:Email" >> $DATABASEFILE
 fi
 
 INPUT=""
@@ -47,13 +57,20 @@ while [ ! "$INPUT" = "e" ] ; do
 	read INPUT
 	case "$INPUT" in
 		"a" )
-			addRecord
+			findRecord
 			;;
 		"b" )
+			addRecord
 			;;
 		"c" )
 			;;
 		"d" )
 			;;
+		"e" )
+			IFS=" "
+			exit
+			;;
+		* )
+			echo "Invalid Input"
 	esac
 done
