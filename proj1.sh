@@ -3,16 +3,13 @@
 DATABASEFILE="databaseFile.txt"
 IFS=":"
 
-function findRecord {
+function findRecord() {
 	echo "Enter what to search for: "
-	read NAME
-	while read p; do
-		if [[ *$NAME* == "$i" ]]; then
-			echo "Record Found"
-			echo $i
-			break;
-		fi
-	done < $DATABASEFILE
+	read SEARCH
+	grep $SEARCH $DATABASEFILE
+	if [ $? = 1 ]; then
+		echo "Nothing Found!"
+	fi
 }
 
 function addRecord {
