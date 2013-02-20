@@ -28,8 +28,19 @@ function addRecord {
 #function updateRecord {
 #}
 
-#function removeRecord {
-#}
+function removeRecord {
+	echo "Enter the record to be removed: "
+	read REMOVE
+	grep $REMOVE $DATABASEFILE
+	if [ $? = 1 ]; then
+		echo "The record cannot be found."
+	else
+		grep -v "$REMOVE" $DATABASEFILE>dbs1
+		echo "The record has been deleted."
+	fi
+	cat dbs1>$DATABASEFILE
+	rm dbs1
+}
 
 function printMenu {
 	echo "Welcome to my contact database, please select from the following menu:"
@@ -62,6 +73,7 @@ while [ ! "$INPUT" = "e" ] ; do
 		"c" )
 			;;
 		"d" )
+			removeRecord
 			;;
 		"e" )
 			IFS=" "
