@@ -1,11 +1,16 @@
 #!/bin/bash
 
 DATABASEFILE="databaseFile.txt"
+OLD_IFS=$IFS
 IFS=":"
 
 function findRecord() {
-	echo "Enter what to search for: "
-	read SEARCH
+	SEARCH=""
+        while [ ! $SEARCH ] || [ $SEARCH  = " " ] ; do
+                echo "Enter what to search for: "
+                read SEARCH
+                SEARCH=$(echo $SEARCH | sed -e 's/^ *//g' -e 's/ *$//g')
+        done
 	grep -i $SEARCH $DATABASEFILE
 	if [ $? = 1 ]; then
 		echo "Nothing Found!"
@@ -153,7 +158,7 @@ function showRecords {
 }
 
 if [ ! -e "$DATABASEFILE" ] ; then
-	echo "Creatineg database file" . $DATABASEFILE
+	echo "Creating database file" $DATABASEFILE
 	touch $DATABASEFILE
 fi
 
@@ -182,7 +187,7 @@ while [ ! "$INPUT" = "g" ] ; do
 			appendDatabase
 			;;
 		"g" | 'G' )
-			IFS=" "
+			IFS=$OLD_IFS
 			#exit
 			;;
 		* )
