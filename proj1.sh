@@ -105,6 +105,19 @@ function updateRecord {
 		
 	done
 }
+
+function appendDatabase {
+	echo "What database file you would like to add (include file extension): "
+	read DB1
+	if [ -f $DB1 ]
+	then
+		cat $DB1 >> $DATABASEFILE
+		echo "The specified file has been appended to the database."
+	else
+		echo "The specified file cannot be found."
+		return 1
+	fi
+}
 	
 
 function removeRecord {
@@ -128,7 +141,8 @@ function printMenu {
 	echo "	(c) Update a record"
 	echo "	(d) Remove a record"
 	echo "	(f) Show all records"
-	echo "	(e) Quit"
+	echo "        (e) Append another database to the current database"
+	echo "	(g) Quit"
 
 }
 
@@ -145,7 +159,7 @@ fi
 
 INPUT=""
 
-while [ ! "$INPUT" = "e" ] ; do
+while [ ! "$INPUT" = "g" ] ; do
 	printMenu
 	read INPUT
 	case "$INPUT" in
@@ -165,6 +179,9 @@ while [ ! "$INPUT" = "e" ] ; do
 			showRecords
 			;;
 		"e" | 'E' )
+			appendDatabase
+			;;
+		"g" | 'G' )
 			IFS=" "
 			#exit
 			;;
