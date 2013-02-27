@@ -5,12 +5,12 @@ OLD_IFS=$IFS
 IFS=":"
 
 function findRecord() {
-	SEARCH=""
-        while [ ! $SEARCH ] || [ $SEARCH  = " " ] ; do
-                echo "Enter what to search for: "
-                read SEARCH
-                SEARCH=$(echo $SEARCH | sed -e 's/^ *//g' -e 's/ *$//g')
-        done
+	SEARCH=""  
+ 	while [ ! $SEARCH ] ; do
+    	echo "Enter what to search for: "
+        read SEARCH
+        SEARCH=$(echo $SEARCH | sed -e 's/^ *//g' -e 's/ *$//g')
+    done
 	grep -i $SEARCH $DATABASEFILE
 	if [ $? = 1 ]; then
 		echo "Nothing Found!"
@@ -18,16 +18,32 @@ function findRecord() {
 }
 
 function addRecord {
-	echo "Enter the person's name: "
-	read NAME
-	echo "Enter the person's address: "
-	read ADDRESS
-	echo "Enter the person's phone number: "
-	read PHONE
-	echo "Enter the person's email: "
-	read EMAIL
+	NAME=""
+	ADDRESS=""
+	PHONE=""
+	EMAIL=""
+	while [ ! $NAME ] ; do
+		echo "Enter the person's name: "
+		read NAME
+		NAME=$(echo $NAME | sed -e 's/^ *//g' -e 's/ *$//g')
+	done
+	while [ ! $ADDRESS ] ; do
+		echo "Enter the person's address: "
+		read ADDRESS
+		ADDRESS=$(echo $ADDRESS | sed -e 's/^ *//g' -e 's/ *$//g')
+	done
+	while [ ! $PHONE ] ; do
+		echo "Enter the person's phone number: "
+		read PHONE
+		PHONE=$(echo $PHONE | sed -e 's/^ *//g' -e 's/ *$//g')
+	done
+	while [ ! $EMAIL ] ; do
+		echo "Enter the person's email: "
+		read EMAIL
+		EMAIL=$(echo $EMAIL | sed -e 's/^ *//g' -e 's/ *$//g')
+	done
 	echo "$NAME:$ADDRESS:$PHONE:$EMAIL" >> $DATABASEFILE
-	echo "Record added"
+	echo $NAME "added!"
 }
 
 function updateMenu {
@@ -39,22 +55,27 @@ function updateMenu {
 		echo "(d) email"
 		echo "(e) Nothing quit"
 		read INPUT
+		INPUT=$(echo $INPUT | sed -e 's/^ *//g' -e 's/ *$//g')
 		case "$INPUT" in
 			"a" | "A" )
 				echo "Enter new name"
 				read NAME
+				NAME=$(echo $NAME | sed -e 's/^ *//g' -e 's/ *$//g')
 				;;
 			"b" | 'B' )
 				echo "Enter new address"
 				read ADDRESS
+				ADDRESS=$(echo $ADDRESS | sed -e 's/^ *//g' -e 's/ *$//g')
 				;;
 			"c" | 'C' )
 				echo "Enter new phone"
 				read PHONE
+				PHONE=$(echo $PHONE | sed -e 's/^ *//g' -e 's/ *$//g')
 				;;
 			"d" | 'D' )
 				echo "Enter new email"
 				read EMAIL
+				EMAIL=$(echo $EMAIL | sed -e 's/^ *//g' -e 's/ *$//g')
 				;;
 			"e" | 'E' )
 				;;
@@ -112,6 +133,7 @@ function updateRecord {
 function appendDatabase {
 	echo "What database file you would like to add (include file extension): "
 	read DB1
+	DB1=$(echo $DB1 | sed -e 's/^ *//g' -e 's/ *$//g')
 	if [ -f $DB1 ]
 	then
 		cat $DB1 >> $DATABASEFILE
@@ -170,6 +192,7 @@ INPUT=""
 while [ ! "$INPUT" = "g" ] ; do
 	printMenu
 	read INPUT
+	INPUT=$(echo $INPUT | sed -e 's/^ *//g' -e 's/ *$//g')
 	case "$INPUT" in
 		"a" | 'A' )
 			findRecord
