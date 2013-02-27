@@ -97,10 +97,8 @@ function updateRecord {
 			#Calls on the update menu to ask what the user would like to update.
 			updateMenu	
 			#REMOVES WHAT YOU searched for so it can be replaced with a new input
-			grep -v "$SEARCH" $DATABASEFILE>dbs1	
-			cat dbs1>$DATABASEFILE
-			rm dbs1
-	
+			removeRecord $SEARCH
+
 			#adds the change to the output file
 			echo "$NAME:$ADDRESS:$PHONE:$EMAIL" >> $DATABASEFILE
 			echo "Record Updated!!"
@@ -126,18 +124,23 @@ function appendDatabase {
 	
 
 function removeRecord {
-	echo "Enter the record to be removed: "
-	read REMOVE
-	grep $REMOVE $DATABASEFILE
-	if [ $? = 1 ]; then
-		echo "The record cannot be found."
-	else
-		grep -v "$REMOVE" $DATABASEFILE>dbs1	
-		echo "The record has been deleted."
-	fi
-	cat dbs1>$DATABASEFILE
-	rm dbs1
+        if [ "$1" = "" ]; then
+                echo "Enter the record to be removed: "
+                read -r REMOVE
+        else
+                REMOVE=$1
+        fi
+
+        REMOVE=$(grep -inm 1 -e $REMOVE $DATABASEFILE | sed 's/\([0-9]\)\:.*/\1/')
+
+        if [ "$REMOVE" != "" ]; then
+                sed -in $(expr $REMOVE)d $DATABASEFILE
+                echo "The record has been deleted."
+        else
+                echo "The record cannot be found."
+        fi
 }
+
 
 function printMenu {
 	echo "Welcome to my contact database, please select from the following menu:"
