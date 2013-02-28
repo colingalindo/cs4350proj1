@@ -99,7 +99,7 @@ function updateRecord {
 		echo ''
 		echo "Which Record would you like to update: "
 		read SEARCH
-		SEARCH=$(echo $SEARCH | sed -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g')
+		SEARCH=$(echo $SEARCH | sed -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g') 
 	done
 	temp=0
 	while [ ! $temp -eq 1 ] ; do	
