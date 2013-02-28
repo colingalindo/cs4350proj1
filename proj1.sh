@@ -118,8 +118,9 @@ function updateRecord {
 			temp=1
 		else 
 			#this finds the line in the file and then askes you which variable you want to change.
-			line=$(grep -in $SEARCH $DATABASEFILE)
+			line=$(grep -in $SEARCH $DATABASEFILE | cut -f1 -d:)
 			STR=$(sed -n $line'p' $DATABASEFILE)
+			echo $STR
 			#IFS=':'
 			set $STR
 			NAME=$1
