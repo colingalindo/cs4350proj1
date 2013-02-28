@@ -94,12 +94,15 @@ function updateMenu {
 }
 
 function updateRecord {
-	echo ''
-	echo "Which Record would you like to update: "
-	read SEARCH
+	while [ ! $SEARCH ] ; do
+		echo ''
+		echo "Which Record would you like to update: "
+		read SEARCH
+		SEARCH=$(echo $SEARCH | sed -e 's/^ *//g' -e 's/ *$//g')
+	done
 	temp=0
 	while [ ! $temp -eq 1 ] ; do	
-		
+
 		#finds how many search results are found
 		temp=$(grep -ci $SEARCH $DATABASEFILE)
 
@@ -114,15 +117,15 @@ function updateRecord {
 			temp=1
 		else 
 			#this finds the line in the file and then askes you which variable you want to change.
-			grep -i $SEARCH $DATABASEFILE
-			STR=$(sed -n $temp'p' $DATABASEFILE)
+			line=$(grep -in $SEARCH $DATABASEFILE)
+			STR=$(sed -n $line'p' $DATABASEFILE)
 			#IFS=':'
 			set $STR
 			NAME=$1
 			ADDRESS=$2
 			PHONE=$3
 			EMAIL=$4
-			
+
 			#Calls on the update menu to ask what the user would like to update.
 			updateMenu	
 			#REMOVES WHAT YOU searched for so it can be replaced with a new input
@@ -132,10 +135,8 @@ function updateRecord {
 			echo "$NAME:$ADDRESS:$PHONE:$EMAIL" >> $DATABASEFILE
 			echo ''
 			echo "Record Updated!!"
-
-
+			temp=1
 		fi
-		
 	done
 }
 
