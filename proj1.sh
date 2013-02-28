@@ -7,10 +7,12 @@ IFS=":"
 function findRecord() {
 	SEARCH=""  
  	while [ ! $SEARCH ] ; do
+ 		echo ''
     	echo "Enter what to search for: "
         read SEARCH
         SEARCH=$(echo $SEARCH | sed -e 's/^ *//g' -e 's/ *$//g')
-    done
+   done
+   echo ''
 	grep -i $SEARCH $DATABASEFILE
 	if [ $? = 1 ]; then
 		echo "Nothing Found!"
@@ -18,6 +20,7 @@ function findRecord() {
 }
 
 function addRecord {
+	echo ''
 	NAME=""
 	ADDRESS=""
 	PHONE=""
@@ -43,11 +46,13 @@ function addRecord {
 		EMAIL=$(echo $EMAIL | sed -e 's/^ *//g' -e 's/ *$//g')
 	done
 	echo "$NAME:$ADDRESS:$PHONE:$EMAIL" >> $DATABASEFILE
+	echo ''
 	echo $NAME "added!"
 }
 
 function updateMenu {
 	while [ ! "$INPUT" = "e" ] ; do
+		echo ''
 		echo "What would you like to change"
 		echo "(a) Name"
 		echo "(b) Address"
@@ -89,6 +94,7 @@ function updateMenu {
 }
 
 function updateRecord {
+	echo ''
 	echo "Which Record would you like to update: "
 	read SEARCH
 	temp=0
@@ -99,9 +105,11 @@ function updateRecord {
 
 		if [ $temp -gt 1 ]; then
 			grep -i $SEARCH $DATABASEFILE
+			echo ''
 			echo "Found multiple Records please be more specific next time."
 			temp=1
 		elif [ $temp -eq 0 ]; then
+			echo ''
 			echo "Nothing Found!"
 			temp=1
 		else 
@@ -122,6 +130,7 @@ function updateRecord {
 
 			#adds the change to the output file
 			echo "$NAME:$ADDRESS:$PHONE:$EMAIL" >> $DATABASEFILE
+			echo ''
 			echo "Record Updated!!"
 
 
@@ -131,14 +140,17 @@ function updateRecord {
 }
 
 function appendDatabase {
+	echo ''
 	echo "What database file you would like to add (include file extension): "
 	read DB1
 	DB1=$(echo $DB1 | sed -e 's/^ *//g' -e 's/ *$//g')
 	if [ -f $DB1 ]
 	then
 		cat $DB1 >> $DATABASEFILE
+		echo ''
 		echo "The specified file has been appended to the database."
 	else
+		echo ''
 		echo "The specified file cannot be found."
 		return 1
 	fi
@@ -146,13 +158,14 @@ function appendDatabase {
 	
 
 function removeRecord {
+	echo ''
         if [ "$1" = "" ]; then
                 echo "Enter the record to be removed: "
                 read -r REMOVE
         else
                 REMOVE=$1
         fi
-
+		  echo ''
         REMOVE=$(grep -inm 1 -e $REMOVE $DATABASEFILE | sed 's/\([0-9]\)\:.*/\1/')
 
         if [ "$REMOVE" != "" ]; then
@@ -165,6 +178,7 @@ function removeRecord {
 
 
 function printMenu {
+	echo ''
 	echo "Welcome to my contact database, please select from the following menu:"
 	echo "	(a) Find a record"
 	echo "	(b) Add a new record"
@@ -177,9 +191,14 @@ function printMenu {
 }
 
 function showRecords {
-	echo ' '
-	cat $DATABASEFILE
-	echo ' '
+	echo ''
+	if [ -s $DATABASEFILE ]
+	then
+		cat $DATABASEFILE
+	else
+		echo "The database file is empty."
+		echo "There are no records to show."
+	fi
 }
 
 if [ ! -e "$DATABASEFILE" ] ; then
