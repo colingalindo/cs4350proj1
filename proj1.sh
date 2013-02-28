@@ -94,11 +94,12 @@ function updateMenu {
 }
 
 function updateRecord {
+	SEARCH=""
 	while [ ! $SEARCH ] ; do
 		echo ''
 		echo "Which Record would you like to update: "
 		read SEARCH
-		SEARCH=$(echo $SEARCH | sed -e 's/^ *//g' -e 's/ *$//g')
+		SEARCH=$(echo $SEARCH | sed -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g')
 	done
 	temp=0
 	while [ ! $temp -eq 1 ] ; do	
@@ -163,6 +164,7 @@ function removeRecord {
         if [ "$1" = "" ]; then
                 echo "Enter the record to be removed: "
                 read -r REMOVE
+		REMOVE=$(echo $REMOVE | sed -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g')
         else
                 REMOVE=$1
         fi
