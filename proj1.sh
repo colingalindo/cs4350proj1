@@ -171,7 +171,14 @@ function removeRecord {
 		  echo ''
         REMOVE=$(grep -inm 1 -e $REMOVE $DATABASEFILE | sed 's/\([0-9]\)\:.*/\1/')
 
-        if [ "$REMOVE" != "" ]; then
+	temp=$(grep -ci $SEARCH $DATABASEFILE)
+
+	if [ $temp -gt 1 ]; then
+		grep -i $SEARCH $DATABASEFILE
+		echo ''
+		echo "Found multiple Records please be more specific next time."
+		temp=''
+        elif [ "$REMOVE" != "" ]; then
                 sed -in $(expr $REMOVE)d $DATABASEFILE
                 echo "The record has been deleted."
         else
