@@ -83,6 +83,7 @@ function updateMenu {
 				EMAIL=$(echo $EMAIL | sed -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g')
 				;;
 			"e" | 'E' )
+				INPUT='e'
 				;;
 			* )
 				echo "Invalid Input"
