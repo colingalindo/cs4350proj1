@@ -145,9 +145,11 @@ function updateRecord {
 
 function appendDatabase {
 	echo ''
-	echo "What database file you would like to add (include file extension): "
-	read DB1
-	DB1=$(echo $DB1 | sed -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g')
+	while [ ! $DB1 ] ; do
+		echo "What database file you would like to add (include file extension): "
+		read DB1
+		DB1=$(echo $DB1 | sed -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g')
+	done
 	if [ -f $DB1 ]
 	then
 		cat $DB1 >> $DATABASEFILE
