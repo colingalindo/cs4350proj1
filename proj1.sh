@@ -174,10 +174,8 @@ function removeRecord {
     fi
     echo ''
     LINE=$(grep -inm 1 -e $REMOVE $DATABASEFILE | sed 's/\([0-9]\)\:.*/\1/')
-    echo "Remove: " $LINE
     if [ "$LINE" != "" ]; then
         temp=$(grep -ci $REMOVE $DATABASEFILE)
-        echo "Temp: " $TEMP
     fi
     if [ $temp ] && [ $temp -gt 1 ]; then
         grep -i $REMOVE $DATABASEFILE
