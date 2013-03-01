@@ -164,30 +164,33 @@ function appendDatabase {
 	
 
 function removeRecord {
-	echo ''
-        if [ "$1" = "" ]; then
-                echo "Enter the record to be removed: "
-                read -r REMOVE
-		REMOVE=$(echo $REMOVE | sed -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g')
-        else
-                REMOVE=$1
-        fi
-		  echo ''
-        REMOVE=$(grep -inm 1 -e $REMOVE $DATABASEFILE | sed 's/\([0-9]\)\:.*/\1/')
+    echo ''
+    if [ "$1" = "" ]; then
+        echo "Enter the record to be removed: "
+        read -r REMOVE
+        REMOVE=$(echo $REMOVE | sed -e 's/^[[:space:]]*//g' -e 's/[[:space:]]*$//g')
+    else
+        REMOVE=$1
+    fi
+    echo ''
+    LINE=$(grep -inm 1 -e $REMOVE $DATABASEFILE | sed 's/\([0-9]\)\:.*/\1/')
+    echo "Remove: " $LINE
+    if [ "$LINE" != "" ]; then
+        temp=$(grep -ci $REMOVE $DATABASEFILE)
+        echo "Temp: " $TEMP
+    fi
+    if [ $temp ] && [ $temp -gt 1 ]; then
+        grep -i $REMOVE $DATABASEFILE
+        echo ''
+        echo "Found multiple Records please be more specific next time."
+        temp=''
+    elif [ "$LINE" != "" ]; then
+        sed -in $(expr $LINE)d $DATABASEFILE
+        echo "The record has been deleted."
+    else
+        echo "The record cannot be found."
+    fi
 
-	temp=$(grep -ci $SEARCH $DATABASEFILE)
-
-	if [ $temp -gt 1 ]; then
-		grep -i $SEARCH $DATABASEFILE
-		echo ''
-		echo "Found multiple Records please be more specific next time."
-		temp=''
-        elif [ "$REMOVE" != "" ]; then
-                sed -in $(expr $REMOVE)d $DATABASEFILE
-                echo "The record has been deleted."
-        else
-                echo "The record cannot be found."
-        fi
 }
 
 
